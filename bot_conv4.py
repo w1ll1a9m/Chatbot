@@ -45,7 +45,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 logger = logging.getLogger(__name__)
 
-GENDER, EVENT, LOCATION, DATE, TIME, CONFLOCATION, CONFDATE, CONFTIME, MEDICAL, ADVICE, POLICE, FINAL, FINAL2,  = range(13)
+GENDER, EVENT, LOCATION, DATE, TIME, CONFLOCATION, CONFDATE, CONFTIME, MEDICAL, ADVICE, POLICE, FINAL, FINAL2  = range(13)
 
 
 
@@ -87,11 +87,12 @@ def start(update, context):
     user = update.message.from_user
     #reply_keyboard = [['Boy', 'Girl', 'AI']]
     update.message.reply_text(
-    'Hello, I am the #metooMaastricht bot and would like to help you'
+    'Hello, I am the #metooMaastricht bot'
     '\nSend /cancel to stop talking to me at any time, or send /start if you want to start the conversation again.\n\n')
     
-    update.message.reply_text('Please tell me what happened, '
-                              'so I know how to help you')
+    update.message.reply_text('I will ask you about your sexual assault and/or harassment experience,'
+                              'I understand that this is personal. I exist to provide support and want to assure you that, I will keep all information confidential and encrypt the dialogue in this chat end to end. '
+                              'Please describe your experience. The more information (including approximate time) and description that you are able to provide will allow me to direct you to the resources that can best help you.')
 
     return EVENT
     
@@ -106,16 +107,16 @@ def conflocation(update, context):
     if update.message.text == 'yes':
         #Location = results.iloc[0]['Location']
         context.user_data['Location'] = Location
-        update.message.reply_text('thanks! for the info',
+        update.message.reply_text('thank you for the information',
                               reply_markup=ReplyKeyboardRemove())
-        if Date=='':
-            update.message.reply_text('when did it happen?',
+        if context.user_data['Date']=='':
+            update.message.reply_text('on what date did it happen?',
                               reply_markup=ReplyKeyboardRemove())
             return DATE
         else:
             reply_keyboard2 = [['yes', 'no']]
             update.message.reply_text('so it happened ... ')
-            update.message.reply_text(results.iloc[0]['Date'])
+            update.message.reply_text(context.user_data['Date'])
             update.message.reply_text('right  ?', reply_markup=ReplyKeyboardMarkup(reply_keyboard2, one_time_keyboard=True))
             
             return CONFDATE
@@ -135,16 +136,16 @@ def confdate(update, context):
     if update.message.text == 'yes':
         #Date = results.iloc[0]['Date']
         context.user_data['Date'] = Date
-        update.message.reply_text('thanks! for the info',
+        update.message.reply_text('thank you for the information',
                               reply_markup=ReplyKeyboardRemove())
-        if Time == '':
-            update.message.reply_text('at what time did it happen?',
+        if context.user_data['Time'] == '':
+            update.message.reply_text('at what time of the day did it happen?',
                               reply_markup=ReplyKeyboardRemove())
             return TIME
         else:
             reply_keyboard2 = [['yes', 'no']]
             update.message.reply_text('so it happened at ... ')
-            update.message.reply_text(results.iloc[0]['time'])
+            update.message.reply_text(context.user_data['time'])
             update.message.reply_text('right  ?', reply_markup=ReplyKeyboardMarkup(reply_keyboard2, one_time_keyboard=True))
             
             return CONFTIME
@@ -163,19 +164,22 @@ def conftime(update, context):
     if update.message.text == 'yes':
         #Time = results.iloc[0]['Time']
         #context.user_data['Time'] = Time
-        update.message.reply_text('thank you for the details',
+        update.message.reply_text('thank you for the information',
                               reply_markup=ReplyKeyboardRemove())
         
         if context.user_data['Physical'] > 0:
-            update.message.reply_text('Seems like you have suffered som sort of Phisical abuse')
             reply_keyboard2 = [['yes', 'no']]
+            update.message.reply_text('Seems like you have suffered some sort of Phisical abuse')
+            
             update.message.reply_text('Do you need medical assistance?', reply_markup=ReplyKeyboardMarkup(reply_keyboard2, one_time_keyboard=True))
             return MEDICAL
         
         
         elif context.user_data['Verbal'] > 0:
-            update.message.reply_text('Seems like you have suffered som sort of Verbal abuse')
-            update.message.reply_text('Info about verbal abuse')
+            update.message.reply_text('Seems like you have suffered some sort of Verbal abuse')
+            update.message.reply_text('You can chat online about your experience with fier.nl (dutch only) at https://www.fier.nl/chat Monday to Friday from 7 pm to 6 am Saturday and Sunday from 8 pm to 6 am Holidays from 8 pm to 6 am, or call them 24/7 at 088 - 20 80 000 ')
+         
+            
             reply_keyboard2 = [['yes', 'no']]
             update.message.reply_text('Have you already reported this to the police?', reply_markup=ReplyKeyboardMarkup(reply_keyboard2, one_time_keyboard=True))
             
@@ -185,8 +189,13 @@ def conftime(update, context):
         
         
         elif context.user_data['NonVerbal'] > 0:
-            update.message.reply_text('Seems like you have suffered som sort of Non Verbal abuse')
-            update.message.reply_text('Info about Non verbal abuse')
+            update.message.reply_text('Seems like you have suffered some sort of Non Verbal abuse')
+            update.message.reply_text('you could contact "Against her will" and talk anonymously their phone is: 0592 - 34 74 44, or visit them  Monday through Thursday from 2:00 pm to 5:00 pm and from 6:00 pm to ')
+            update.message.reply_text('Phone: 0592 - 34 74 44')
+            update.message.reply_text('Hours: Monday through Thursday from 2:00 pm to 5:00 pm and from 6:00 pm to 9:00 pm')
+            
+            
+            
             reply_keyboard2 = [['yes', 'no']]
             update.message.reply_text('Have you already reported this to the police?', reply_markup=ReplyKeyboardMarkup(reply_keyboard2, one_time_keyboard=True))
             
@@ -204,11 +213,19 @@ def conftime(update, context):
 
 
 def medical(update, context):
-    if update.message == 'yes':
-        update.message.reply_text('get to the doctor',
+    
+    if update.message.text == 'yes':
+        update.message.reply_text('You can go to the Emergency Department of Maastricht UMC+, they can be contacted 7 days per week, 24 hours per day at Phone Number: 0031-43-387 67 00',
                               reply_markup=ReplyKeyboardRemove())
         
+    
+    update.message.reply_text('Since you have suffered phisical abuse, you can contact Centrum Seksueel Geweld Limburg (CSG Limburg) 24/7 their phone number is: 0800 01 88')
+    update.message.reply_text('Or you can contact Acute care: 043 604 55 77 (for crises or emergencies), their phone is: 088 119 18 88 and they are located at: Randwycksingel 35 6229 EG Maastricht')      
+    update.message.reply_text('If you are under 25 please contact: GGD Zuid Limburg-Centrum voor Seksuele Gezondheid (Burgers), their phone is: 088 880 50 72 or visit them Monday-Friday, 8:00-12:15 and Monday-Wednesday 13:30-15:30 as well',reply_markup=ReplyKeyboardRemove())
+
+
     reply_keyboard2 = [['yes', 'no']]
+    
     update.message.reply_text('Have you already reported this to the police?', reply_markup=ReplyKeyboardMarkup(reply_keyboard2, one_time_keyboard=True))
             
     return POLICE
@@ -216,14 +233,15 @@ def medical(update, context):
 
 
 def police(update, context):
-    if update.message == 'yes':
+    if update.message.text == 'yes':
         
         update.message.reply_text('Great', reply_markup=ReplyKeyboardRemove())
         reply_keyboard2 = [['yes', 'no']]
         update.message.reply_text('Did you find this bot useful ?', reply_markup=ReplyKeyboardMarkup(reply_keyboard2, one_time_keyboard=True))
         return FINAL
     else:
-        update.message.reply_text('get to the policeeeeeeeeee!!!!!!', reply_markup=ReplyKeyboardRemove())
+        update.message.reply_text('Please report this event to the Police at this phone number: 0900 88 44')
+        update.message.reply_text('And have this in mind when you report this event: https://www.politie.nl/themas/seksueel-misbruik.html ', reply_markup=ReplyKeyboardRemove())
         reply_keyboard2 = [['yes', 'no']]
         update.message.reply_text('Did you find this bot useful ?', reply_markup=ReplyKeyboardMarkup(reply_keyboard2, one_time_keyboard=True))
         return FINAL
@@ -231,26 +249,37 @@ def police(update, context):
 
 
 def final(update, context):
-    if update.message == 'yes':
+    
+    if update.message.text == 'yes':
+        update.message.reply_text('xxxxxx')
         update.message.reply_text('good', reply_markup=ReplyKeyboardRemove())
         
         update.message.reply_text("This is the info I gathered from you:"
                               "{}"
-                              "Until next time!".format(facts_to_str(user_data)))
+                              "Until next time!".format(facts_to_str(context.user_data)))
         
         
         reply_keyboard2 = [['yes', 'no']]
-        update.message.reply_text('Is it ok if i keep it to help other people that may be harassment victims. It will be kept anonymously', reply_markup=ReplyKeyboardMarkup(reply_keyboard2, one_time_keyboard=True))
+        update.message.reply_text('To improve policy for sexual harassment and assault prevention in Maastricht and for research purposes, may we anonymously store the information you have reported? If you decline, this information will not be stored.', reply_markup=ReplyKeyboardMarkup(reply_keyboard2, one_time_keyboard=True))
         return FINAL2
+    else:
+        update.message.reply_text('ok, thank you for the feedback')
+        reply_keyboard2 = [['yes', 'no']]
+        update.message.reply_text('To improve policy for sexual harassment and assault prevention in Maastricht and for research purposes, may we anonymously store the information you have reported? If you decline, this information will not be stored.', reply_markup=ReplyKeyboardMarkup(reply_keyboard2, one_time_keyboard=True))
+        return FINAL2
+        
         
     
 
 def final2(update, context):
-    if update.message == 'yes':
-        update.message.reply_text('Thank you', reply_markup=ReplyKeyboardRemove())
+    user_data = context.user_data
+    if update.message.text == 'yes':
+        update.message.reply_text('Thank you. Goodbye!', reply_markup=ReplyKeyboardRemove())
+        user_data.clear()
         return ConversationHandler.END
     else:
-        update.message.reply_text('ooh that sucks you just used me :(', reply_markup=ReplyKeyboardRemove())
+        update.message.reply_text('Thank you. Goodbye!', reply_markup=ReplyKeyboardRemove())
+        user_data.clear()
         return ConversationHandler.END
         
         
@@ -270,6 +299,8 @@ def gender(update, context):
 def event(update, context):
     user = update.message.from_user
     user_data = context.user_data
+    
+    
     #photo_file = update.message.photo[-1].get_file()
     #photo_file.download('user_photo.jpg')
     
@@ -303,7 +334,9 @@ def event(update, context):
         update.message.reply_text('Seems like you have been harrassed \n ')
         
         if results.iloc[0]['Location'] == '':
-            update.message.reply_text('Where did it happen ? \n ')
+            update.message.reply_text('Please indicate where this experience took place. This does not need to be precise. \n ')
+            #bot.sendLocation(update.effective_message.chat_id, latitude=50.849205, longitude=5.688919, live_period='10000');
+            
             return LOCATION
         else:
             #update.message.reply_text('got location')
@@ -317,8 +350,7 @@ def event(update, context):
             
     
     elif results.iloc[0]['Harassment_flg'] == -9: 
-        update.message.reply_text('I see, can you give me more details '
-                              'I need more info!')
+        update.message.reply_text('I understand, can you give me more information please? ')
         return EVENT
     
     elif results.iloc[0]['Harassment_flg'] == 0: 
@@ -361,7 +393,7 @@ def location(update, context):
     context.user_data['Time'] = Time
     
     if results.iloc[0]['Location'] == '':
-        update.message.reply_text('I am sorry my NER system is lazy, can you be more explicit ?')
+        update.message.reply_text('Can you be more explicit please?')
         return LOCATION
     else:
         reply_keyboard2 = [['yes', 'no']]
@@ -389,7 +421,7 @@ def date(update, context):
     context.user_data['Date'] = Date
     context.user_data['Time'] = Time
     if results.iloc[0]['Date'] == '':
-        update.message.reply_text('I am sorry my NER system is lazy, can you be more explicit ?')
+        update.message.reply_text('Can you be more explicit please?')
         return DATE
     else:
         reply_keyboard2 = [['yes', 'no']]
@@ -437,7 +469,7 @@ def time(update, context):
     context.user_data['Date'] = Date
     context.user_data['Time'] = Time
     if results.iloc[0]['Time'] == '':
-        update.message.reply_text('I am sorry my NER system is lazy, can you be more explicit ?')
+        update.message.reply_text('Can you be more explicit please?')
         return TIME
     else:
         reply_keyboard2 = [['yes', 'no']]
@@ -496,11 +528,13 @@ Date = ''
 Time = ''
 Location = ''
 Finaltext=''
+bot = telegram.Bot("755280190:AAEm9PPQPR4rhTBh2rNh2t32QgeRQO1Nusg")
+
 def main():
     # Create the Updater and pass it your bot's token.
     # Make sure to set use_context=True to use the new context based callbacks
     # Post version 12 this will no longer be necessary
-    
+    bot = telegram.Bot("755280190:AAEm9PPQPR4rhTBh2rNh2t32QgeRQO1Nusg")
     
    
     
