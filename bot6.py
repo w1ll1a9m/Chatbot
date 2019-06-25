@@ -168,7 +168,7 @@ def conftime(update, context):
                               reply_markup=ReplyKeyboardRemove())
         if context.user_data['Physical'] > 0:
             reply_keyboard2 = [['yes', 'no']]
-            update.message.reply_text('Seems like you have suffered some sort of Phisical abuse')
+            update.message.reply_text('Seems like you have suffered some sort of Physical abuse')
             update.message.reply_text('Do you need medical assistance?', reply_markup=ReplyKeyboardMarkup(reply_keyboard2, one_time_keyboard=True))
             return MEDICAL
         
@@ -207,7 +207,7 @@ def htype (update, context):
     
     if context.user_data['Physical'] > 0:
         reply_keyboard2 = [['yes', 'no']]
-        update.message.reply_text('Seems like you have suffered some sort of Phisical abuse')
+        update.message.reply_text('Seems like you have suffered some sort of Physical abuse')
             
         update.message.reply_text('Do you need medical assistance?', reply_markup=ReplyKeyboardMarkup(reply_keyboard2, one_time_keyboard=True))
         return MEDICAL
@@ -249,7 +249,7 @@ def medical(update, context):
                               reply_markup=ReplyKeyboardRemove())
         
     
-    update.message.reply_text('Since you have suffered phisical abuse, you can contact Centrum Seksueel Geweld Limburg (CSG Limburg) 24/7 their phone number is: 0800 01 88')
+    update.message.reply_text('Since you have suffered physical abuse, you can contact Centrum Seksueel Geweld Limburg (CSG Limburg) 24/7 their phone number is: 0800 01 88')
     update.message.reply_text('Or you can contact Acute care: 043 604 55 77 (for crises or emergencies), their phone is: 088 119 18 88 and they are located at: Randwycksingel 35 6229 EG Maastricht')      
     update.message.reply_text('If you are under 25 please contact: GGD Zuid Limburg-Centrum voor Seksuele Gezondheid (Burgers), their phone is: 088 880 50 72 or visit them Monday-Friday, 8:00-12:15 and Monday-Wednesday 13:30-15:30 as well',reply_markup=ReplyKeyboardRemove())
 
@@ -549,7 +549,7 @@ def time(update, context):
         
         if context.user_data['Physical'] > 0:
             reply_keyboard2 = [['yes', 'no']]
-            update.message.reply_text('Seems like you have suffered some sort of Phisical abuse')
+            update.message.reply_text('Seems like you have suffered some sort of Physical abuse')
             update.message.reply_text('Do you need medical assistance?', reply_markup=ReplyKeyboardMarkup(reply_keyboard2, one_time_keyboard=True))
             return MEDICAL
         
