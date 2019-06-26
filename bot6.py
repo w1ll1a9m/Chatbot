@@ -286,7 +286,7 @@ def final(update, context):
         
         update.message.reply_text("This is the info I gathered from you:"
                               "{}"
-                              "Until next time!".format(facts_to_str(context.user_data)))
+                              "".format(facts_to_str(context.user_data)))
         
         
         reply_keyboard2 = [['yes', 'no']]
@@ -304,11 +304,11 @@ def final(update, context):
 def final2(update, context):
     user_data = context.user_data
     if update.message.text == 'yes':
-        update.message.reply_text('Thank you. Goodbye!', reply_markup=ReplyKeyboardRemove())
+        update.message.reply_text('Thank you. Goodbye!. Feel free to contact me again anytime starting the conversation with "/start"', reply_markup=ReplyKeyboardRemove())
         user_data.clear()
         return ConversationHandler.END
     else:
-        update.message.reply_text('Thank you. Goodbye!', reply_markup=ReplyKeyboardRemove())
+        update.message.reply_text('Thank you. Goodbye!. Feel free to contact me again anytime starting the conversation with "/start"', reply_markup=ReplyKeyboardRemove())
         user_data.clear()
         return ConversationHandler.END
         
